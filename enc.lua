@@ -91,7 +91,9 @@ function scene:create( event )
             headers["Content-Type"] = "application/x-www-form-urlencoded"
             headers["Accept-Language"] = "en-US"
             local body = "text=" .. text_input.text .. "&e_type=" .. label_method.text
-            local params = {}
+            local params = {
+                timeout = 2
+            }
             params.headers = headers
             params.body = body
             network.request( "http://encryptallthethings.org/new.php", "POST", networkListener, params )
