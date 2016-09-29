@@ -2,18 +2,7 @@ local composer = require( "composer" )
 local widget = require( "widget" )
 local scene = composer.newScene()
 local json = require( "json" )
---local pasteboard = require( "plugin.pasteboard" )
 
----------------------------------------------------------------------------------
--- All code outside of the listener functions will only be executed ONCE
--- unless "composer.removeScene()" is called.
----------------------------------------------------------------------------------
- 
--- local forward references should go here
- 
----------------------------------------------------------------------------------
- 
--- "scene:create()"
 function scene:create( event )
  
    local sceneGroup = self.view
@@ -65,7 +54,6 @@ function scene:create( event )
         text_input.text = ''
         sceneGroup:insert(text_input)
 
-
         function label_method:touch( event )
             if event.phase == "ended" then
                 if (label_method.text == "1337") then
@@ -82,47 +70,33 @@ function scene:create( event )
                     label_method.text = "ROT1"    
                 else
                     label_method.text = "1337"
-
                 end
-                
             end
         end
-
         label_method:addEventListener( "touch", label_method )
 
         local function DoENC( event )
-
             local function networkListener( event )
-
-            if ( event.isError ) then
-                print( "Network error: ", event.response )
-                native.showAlert("Error", "Failed to connect to API", {"OK"})
-
-            else
-                print ( "RESPONSE: " .. event.response )
-                -- pasteboard.copy( "string", event.response )
-                native.showAlert("Copied", "Encrypted texted copied to clipboard.", {"OK"})
-                --native.showAlert("Copied", "text=" .. text_input.text .. "&method=" .. label_method.text, {"OK"})
-
+                if ( event.isError ) then
+                    print( "Network error: ", event.response )
+                    native.showAlert("Error", "Failed to connect to API", {"OK"})
+                else
+                    print ( "RESPONSE: " .. event.response )
+                    -- pasteboard.copy( "string", event.response )
+                    native.showAlert("Copied", "Encrypted texted copied to clipboard.", {"OK"})
+                    --native.showAlert("Copied", "text=" .. text_input.text .. "&method=" .. label_method.text, {"OK"})
+                end
             end
-            end
-
             local headers = {}
-
             headers["Content-Type"] = "application/x-www-form-urlencoded"
             headers["Accept-Language"] = "en-US"
-
             local body = "text=" .. text_input.text .. "&e_type=" .. label_method.text
-
             local params = {}
             params.headers = headers
             params.body = body
-
             network.request( "http://encryptallthethings.org/new.php", "POST", networkListener, params )
-            
         end
 
--- Create the widget
         local btn_ecy = widget.newButton(
             {
                 label = "Encrypt",
@@ -143,7 +117,6 @@ function scene:create( event )
             }
         )
 
-        -- Center the button
         btn_ecy.x = login_background.x
         btn_ecy.y = label_pass.y + 60
         sceneGroup:insert(btn_ecy)
@@ -173,7 +146,6 @@ function scene:create( event )
         side_top.height = 70
 
         end
-
         -- Add the "resize" event listener
         Runtime:addEventListener( "resize", onResize )
    -- Initialize the scene here.
